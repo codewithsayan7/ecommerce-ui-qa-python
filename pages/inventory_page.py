@@ -1,5 +1,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class InventoryPage:
@@ -22,6 +25,9 @@ class InventoryPage:
 
     def remove_backpack(self):
         self.driver.find_element(*self.REMOVE_BACKPACK_BTN).click()
+        WebDriverWait(self.driver, 5).until(
+            EC.invisibility_of_element_located(self.CART_BADGE)
+        )
 
     def cart_count(self):
         badges = self.driver.find_elements(*self.CART_BADGE)
