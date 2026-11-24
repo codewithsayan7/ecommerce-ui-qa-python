@@ -1,0 +1,8 @@
+Test Case ID,Module,Title,Precondition,Steps,Expected Result,Type
+TC_01,Login,Valid login with standard user,User is on login page,Enter valid username and password and click Login,User lands on Products page,Positive
+TC_02,Login,Blocked login for locked-out user,User is on login page,Enter locked_out_user and valid password,Error banner states user is locked out,Negative
+TC_03,Login,Empty username validation,User is on login page,Leave username blank enter password and click Login,Error banner states Username is required,Negative
+TC_04,Cart,Add and remove item updates badge,User is logged in,Click Add to Cart then Remove on Backpack,Cart badge updates from 1 to empty,Functional
+TC_05,Catalog,Sort items by price low to high,User is logged in,Select Price (low to high) from sort dropdown,Item prices appear in ascending order,Functional
+TC_06,Checkout,Complete order with valid details,1 item in cart,Click Checkout fill First Name Last Name Postal Code and Finish,Order confirmation message is displayed,Positive
+TC_07,Checkout,Missing postal code blocked,1 item in cart,Leave Postal Code blank and click Continue,Error banner states Postal Code is required,Negative
