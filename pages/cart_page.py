@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class CartPage:
@@ -13,21 +15,42 @@ class CartPage:
 
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
 
     def start_checkout(self):
-        self.driver.find_element(*self.CHECKOUT_BTN).click()
+        self.wait.until(EC.element_to_be_clickable(self.CHECKOUT_BTN)).click()
+        self.wait.until(EC.visibility_of_element_located(self.FIRST_NAME))
 
     def fill_customer_info(self, first_name, last_name, postal_code):
-        self.driver.find_element(*self.FIRST_NAME).send_keys(first_name)
-        self.driver.find_element(*self.LAST_NAME).send_keys(last_name)
-        self.driver.find_element(*self.POSTAL_CODE).send_keys(postal_code)
-        self.driver.find_element(*self.CONTINUE_BTN).click()
+        first_name_input = self.wait.until(
+            EC.visibility_of_element_located(self.FIRST_NAME)
+        )
+        first_name_input.clear()
+        first_name_input.send_keys(first_name)
+
+        last_name_input = self.wait.until(
+            EC.visibility_of_element_located(self.LAST_NAME)
+        )
+        last_name_input.clear()
+        last_name_input.send_keys(last_name)
+
+        postal_code_input = self.wait.until(
+            EC.visibility_of_element_located(self.POSTAL_CODE)
+        )
+        postal_code_input.clear()
+        postal_code_input.send_keys(postal_code)
+
+        self.wait.until(EC.element_to_be_clickable(self.CONTINUE_BTN)).click()
 
     def finish_order(self):
-        self.driver.find_element(*self.FINISH_BTN).click()
+        self.wait.until(EC.element_to_be_clickable(self.FINISH_BTN)).click()
 
     def confirmation_text(self):
-        return self.driver.find_element(*self.COMPLETE_HEADER).text
+        return self.wait.until(
+            EC.visibility_of_element_located(self.COMPLETE_HEADER)
+        ).text
 
     def error_text(self):
-        return self.driver.find_element(*self.ERROR_BANNER).text
+        return self.wait.until(
+            EC.visibility_of_element_located(self.ERROR_BANNER)
+        ).text
