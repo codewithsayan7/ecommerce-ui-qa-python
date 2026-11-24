@@ -1,8 +1,6 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
 
 class InventoryPage:
@@ -16,29 +14,31 @@ class InventoryPage:
 
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
 
     def heading(self):
-        return self.driver.find_element(*self.PAGE_TITLE).text
+        element = self.wait.until(EC.visibility_of_element_located(self.PAGE_TITLE))
+        return element.text
 
     def add_backpack(self):
-        self.driver.find_element(*self.ADD_BACKPACK_BTN).click()
+        self.wait.until(EC.element_to_be_clickable(self.ADD_BACKPACK_BTN)).click()
 
     def remove_backpack(self):
-        self.driver.find_element(*self.REMOVE_BACKPACK_BTN).click()
-        WebDriverWait(self.driver, 5).until(
-            EC.invisibility_of_element_located(self.CART_BADGE)
-        )
+        self.wait.until(EC.element_to_be_clickable(self.REMOVE_BACKPACK_BTN)).click()
+        self.wait.until(EC.invisibility_of_element_located(self.CART_BADGE))
 
     def cart_count(self):
         badges = self.driver.find_elements(*self.CART_BADGE)
         return int(badges[0].text) if badges else 0
 
     def open_cart(self):
-        self.driver.find_element(*self.CART_LINK).click()
+        self.wait.until(EC.element_to_be_clickable(self.CART_LINK)).click()
 
     def sort_by(self, value):
-        Select(self.driver.find_element(*self.SORT_DROPDOWN)).select_by_value(value)
+        dropdown = self.wait.until(EC.visibility_of_element_located(self.SORT_DROPDOWN))
+        Select(dropdown).select_by_value(value)
 
     def get_prices(self):
+        self.wait.until(EC.presence_of_all_elements_located(self.ITEM_PRICES))
         elements = self.driver.find_elements(*self.ITEM_PRICES)
-        return [float(el.text.replace("$", "")) for el in elements]
+        return [float(element.text.replace("$", "")) for element in elements]
