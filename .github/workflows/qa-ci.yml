@@ -16,6 +16,8 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Create report directory
+        run: mkdir -p reports
       - name: Run headless UI suite
         run: pytest --headless --html=reports/report.html --self-contained-html
       - name: Upload test report
@@ -24,3 +26,4 @@ jobs:
         with:
           name: pytest-html-report
           path: reports/report.html
+          if-no-files-found: warn
